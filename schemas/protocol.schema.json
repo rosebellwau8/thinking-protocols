@@ -37,7 +37,7 @@
     },
     "routing_priority": {
       "type": "integer",
-      "minimum": 1
+      "minimum": 0
     },
     "source_category": {
       "type": "string",

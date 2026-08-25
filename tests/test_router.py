@@ -180,3 +180,52 @@ def test_no_routing_decision_contains_more_than_two_protocols() -> None:
 
     for request in requests:
         assert len(route_request(request, pilot_protocols()).protocol_ids) <= 2
+
+
+def test_priority_cannot_override_higher_precedence_or_requirements() -> None:
+    explicit = synthetic_protocol("explicit", produces=("result.v1",), priority=0)
+    high = synthetic_protocol("high", produces=("result.v1",), priority=100)
+    explicit_decision = route_request(
+        RoutingRequest(
+            explicit_protocol="explicit",
+            desired_artifact="result.v1",
+            complexity="complex",
+        ),
+        (explicit, high),
+    )
+    assert explicit_decision.protocol_ids == ("explicit",)
+
+    direct_decision = route_request(
+        RoutingRequest(primary_role="reason", complexity="simple"),
+        (high,),
+    )
+    assert direct_decision.action == "direct_answer"
+    assert direct_decision.protocol_ids == ()
+
+    capability_bound = synthetic_protocol(
+        "capability-bound",
+        produces=("capability_result.v1",),
+        priority=100,
+        required_capabilities=("web.search",),
+    )
+    capability_decision = route_request(
+        RoutingRequest(
+            desired_artifact="capability_result.v1", complexity="complex"
+        ),
+        (capability_bound,),
+    )
+    assert capability_decision.action == "blocked"
+    assert capability_decision.missing_capabilities == ("web.search",)
+
+    iterative = synthetic_protocol(
+        "iterative",
+        produces=("iterative_result.v1",),
+        priority=100,
+        interaction_mode="iterative",
+    )
+    consent_decision = route_request(
+        RoutingRequest(desired_artifact="iterative_result.v1", complexity="complex"),
+        (iterative,),
+    )
+    assert consent_decision.action == "request_input"
+    assert "ITERATIVE_CONSENT_REQUIRED" in consent_decision.reason_codes

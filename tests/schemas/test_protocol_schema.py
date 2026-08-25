@@ -48,3 +48,13 @@ def test_protocol_capabilities_use_the_canonical_vocabulary() -> None:
 
     with pytest.raises(ValidationError):
         load_validator().validate(metadata)
+
+
+def test_routing_priority_accepts_zero_and_rejects_negative_values() -> None:
+    metadata = load_frontmatter(FIXTURES / "valid.md")
+    metadata["routing_priority"] = 0
+    load_validator().validate(metadata)
+
+    metadata["routing_priority"] = -1
+    with pytest.raises(ValidationError):
+        load_validator().validate(metadata)
