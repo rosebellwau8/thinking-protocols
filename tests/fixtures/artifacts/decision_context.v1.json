@@ -1,0 +1,23 @@
+{
+  "type": "decision_context",
+  "schema_version": "v1",
+  "produced_by": {
+    "protocol": "context-capture",
+    "protocol_version": "0.1.0"
+  },
+  "provenance": {
+    "input_artifacts": ["clarified_problem.v1"],
+    "sources": ["Fictional budget note"]
+  },
+  "uncertainty": {
+    "level": "low",
+    "unresolved": []
+  },
+  "payload": {
+    "goal": "Learn which market produces qualified interviews fastest",
+    "constraints": ["Budget is limited to 2000 units", "Pilot must finish in four weeks"],
+    "preferences": ["Prefer reversible commitments"],
+    "reversibility": "reversible"
+  }
+}
+

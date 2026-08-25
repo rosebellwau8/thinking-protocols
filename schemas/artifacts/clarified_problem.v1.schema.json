@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thinking-protocols.local/schemas/artifacts/clarified_problem.v1.schema.json",
+  "title": "Clarified Problem Artifact v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "schema_version", "produced_by", "provenance", "uncertainty", "payload"],
+  "properties": {
+    "type": {"const": "clarified_problem"},
+    "schema_version": {"const": "v1"},
+    "produced_by": {"$ref": "#/$defs/produced_by"},
+    "provenance": {"$ref": "#/$defs/provenance"},
+    "uncertainty": {"$ref": "#/$defs/uncertainty"},
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["original", "reframed", "confirmed_facts", "unverified_assumptions", "key_variables", "next_actionable_question"],
+      "properties": {
+        "original": {"type": "string", "minLength": 1},
+        "reframed": {"type": "string", "minLength": 1},
+        "confirmed_facts": {"$ref": "#/$defs/string_list"},
+        "unverified_assumptions": {"$ref": "#/$defs/string_list"},
+        "key_variables": {"$ref": "#/$defs/string_list"},
+        "next_actionable_question": {"type": "string", "minLength": 1}
+      }
+    }
+  },
+  "$defs": {
+    "produced_by": {"type": "object", "additionalProperties": false, "required": ["protocol", "protocol_version"], "properties": {"protocol": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"}, "protocol_version": {"type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"}}},
+    "provenance": {"type": "object", "additionalProperties": false, "required": ["input_artifacts", "sources"], "properties": {"input_artifacts": {"type": "array", "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*\\.v[1-9][0-9]*$"}, "uniqueItems": true}, "sources": {"$ref": "#/$defs/string_list"}}},
+    "uncertainty": {"type": "object", "additionalProperties": false, "required": ["level", "unresolved"], "properties": {"level": {"enum": ["low", "medium", "high", "unknown"]}, "unresolved": {"$ref": "#/$defs/string_list"}}},
+    "string_list": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+  }
+}
+

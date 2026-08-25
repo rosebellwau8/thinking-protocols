@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thinking-protocols.local/schemas/capability.schema.json",
+  "title": "Thinking Protocols Capability Identifier",
+  "description": "The authoritative vocabulary of runtime capability identifiers.",
+  "type": "string",
+  "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+$",
+  "enum": [
+    "web.search",
+    "web.open",
+    "files.read",
+    "code.execute"
+  ]
+}

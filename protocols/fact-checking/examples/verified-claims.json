@@ -1,0 +1,20 @@
+{
+  "type": "verified_claims",
+  "schema_version": "v1",
+  "produced_by": {"protocol": "fact-checking", "protocol_version": "0.1.0"},
+  "provenance": {"input_artifacts": ["claim_set.v1"], "sources": ["Fictional public registry dated 2026-08-01"]},
+  "uncertainty": {"level": "medium", "unresolved": ["Late filings may be absent"]},
+  "payload": {
+    "claims": [
+      {
+        "claim": "The fictional district has 500 eligible organizations",
+        "verdict": "mixed",
+        "evidence": ["The registry lists 472 active eligible organizations"],
+        "source_date": "2026-08-01",
+        "scope": "Active registered organizations in the fictional district",
+        "remaining_uncertainty": "Eligibility is unclear for 18 recent filings"
+      }
+    ]
+  }
+}
+

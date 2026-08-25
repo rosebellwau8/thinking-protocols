@@ -1,0 +1,60 @@
+---
+name: {{ metadata.id }}
+description: >-
+  Apply the {{ metadata.id }} cognitive Protocol when {{ metadata.use_when[0] }}
+metadata:
+  source_version: "{{ metadata.version }}"
+  source_digest: "{{ protocol.digest }}"
+  required_capabilities: {{ required_capabilities_json }}
+---
+
+# {{ metadata.id }}
+
+## Capability Contract
+
+Required:
+{% for capability in metadata.capabilities.required | sort %}
+- `{{ capability }}`
+{% else %}
+- None
+{% endfor %}
+
+Optional:
+{% for capability in metadata.capabilities.optional | sort %}
+- `{{ capability }}`
+{% else %}
+- None
+{% endfor %}
+
+If a required capability is missing, apply `{{ metadata.capabilities.on_missing }}`.
+
+## Stop Conditions
+
+{% for condition in metadata.stop_conditions %}
+- {{ condition }}
+{% endfor %}
+
+## Artifact Contract
+
+Consumes:
+{% for artifact in metadata.consumes | sort %}
+- `{{ artifact }}`
+{% else %}
+- None
+{% endfor %}
+
+Produces:
+{% for artifact in metadata.produces | sort %}
+- `{{ artifact }}`
+{% else %}
+- None
+{% endfor %}
+
+## Procedure
+
+{{ protocol.body }}
+
+<!-- thinking-protocols-invariants
+{{ invariants_json }}
+thinking-protocols-invariants -->
+

@@ -1,0 +1,9 @@
+id: generic
+output: dist/generic
+supports:
+  commands: false
+  skills: false
+  persistent_state: false
+  tool_binding: false
+template: templates/prompt.md.j2
+

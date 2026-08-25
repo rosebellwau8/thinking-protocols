@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "thinking-protocols"
 version = "0.1.0"
 description = "Artifact-driven cognitive protocols with deterministic adapters"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 dependencies = [
   "Jinja2>=3.1,<4",
   "jsonschema>=4.23,<5",

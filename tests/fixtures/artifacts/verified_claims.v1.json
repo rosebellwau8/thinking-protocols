@@ -1,0 +1,29 @@
+{
+  "type": "verified_claims",
+  "schema_version": "v1",
+  "produced_by": {
+    "protocol": "fact-checking",
+    "protocol_version": "0.1.0"
+  },
+  "provenance": {
+    "input_artifacts": ["claim_set.v1"],
+    "sources": ["Fictional municipal registry dated 2026-08-01"]
+  },
+  "uncertainty": {
+    "level": "medium",
+    "unresolved": ["Recent business closures may not be reflected"]
+  },
+  "payload": {
+    "claims": [
+      {
+        "claim": "Market A has 500 eligible buyers",
+        "verdict": "mixed",
+        "evidence": ["The registry lists 472 active eligible organizations"],
+        "source_date": "2026-08-01",
+        "scope": "Registered organizations in Market A",
+        "remaining_uncertainty": "Eligibility for 18 organizations is unclear"
+      }
+    ]
+  }
+}
+

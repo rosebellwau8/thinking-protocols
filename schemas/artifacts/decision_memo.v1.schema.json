@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thinking-protocols.local/schemas/artifacts/decision_memo.v1.schema.json",
+  "title": "Decision Memo Artifact v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "schema_version", "produced_by", "provenance", "uncertainty", "payload"],
+  "properties": {
+    "type": {"const": "decision_memo"},
+    "schema_version": {"const": "v1"},
+    "produced_by": {"$ref": "#/$defs/produced_by"},
+    "provenance": {"$ref": "#/$defs/provenance"},
+    "uncertainty": {"$ref": "#/$defs/uncertainty"},
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["strongest_cases", "decisive_variables", "recommendation", "conditions", "uncertainty"],
+      "properties": {
+        "strongest_cases": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["option", "case"],
+            "properties": {
+              "option": {"type": "string", "minLength": 1},
+              "case": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "decisive_variables": {"$ref": "#/$defs/string_list"},
+        "recommendation": {"type": "string", "minLength": 1},
+        "conditions": {"$ref": "#/$defs/string_list"},
+        "uncertainty": {"type": "string", "minLength": 1}
+      }
+    }
+  },
+  "$defs": {
+    "produced_by": {"type": "object", "additionalProperties": false, "required": ["protocol", "protocol_version"], "properties": {"protocol": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"}, "protocol_version": {"type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"}}},
+    "provenance": {"type": "object", "additionalProperties": false, "required": ["input_artifacts", "sources"], "properties": {"input_artifacts": {"type": "array", "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*\\.v[1-9][0-9]*$"}, "uniqueItems": true}, "sources": {"$ref": "#/$defs/string_list"}}},
+    "uncertainty": {"type": "object", "additionalProperties": false, "required": ["level", "unresolved"], "properties": {"level": {"enum": ["low", "medium", "high", "unknown"]}, "unresolved": {"$ref": "#/$defs/string_list"}}},
+    "string_list": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+  }
+}
+

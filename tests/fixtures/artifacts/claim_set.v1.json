@@ -1,0 +1,24 @@
+{
+  "type": "claim_set",
+  "schema_version": "v1",
+  "produced_by": {
+    "protocol": "claim-decomposition",
+    "protocol_version": "0.1.0"
+  },
+  "provenance": {
+    "input_artifacts": ["clarified_problem.v1"],
+    "sources": ["Fictional planning brief"]
+  },
+  "uncertainty": {
+    "level": "high",
+    "unresolved": ["No external evidence has been checked"]
+  },
+  "payload": {
+    "claims": [
+      {"claim": "Market A has 500 eligible buyers", "kind": "factual_claim"},
+      {"claim": "Market A will be easier to enter", "kind": "inference"},
+      {"claim": "Fast learning matters more than margin", "kind": "value_judgment"}
+    ]
+  }
+}
+

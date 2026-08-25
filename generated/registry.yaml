@@ -1,0 +1,59 @@
+schema_version: v1
+protocols:
+- id: fact-checking
+  version: 0.1.0
+  lifecycle: draft
+  primary_role: verify
+  secondary_roles:
+  - research
+  interaction_mode: one_shot
+  routing_priority: 0
+  required_capabilities:
+  - web.search
+  consumes:
+  - claim_set.v1
+  produces:
+  - verified_claims.v1
+  source_digest: 440113d8de5ee41e749b2250f55511d9175ef42ca60db436079961c63e9e69d1
+- id: minimum-experiment
+  version: 0.1.0
+  lifecycle: draft
+  primary_role: experiment
+  secondary_roles:
+  - decide
+  interaction_mode: one_shot
+  routing_priority: 0
+  required_capabilities: []
+  consumes:
+  - decision_memo.v1
+  produces:
+  - experiment_plan.v1
+  source_digest: b84f893ede4c01fe60036013f42a2212e64c816e7aef923deaefdc5b30eb9d36
+- id: socratic-questioning
+  version: 0.1.0
+  lifecycle: draft
+  primary_role: clarify
+  secondary_roles: []
+  interaction_mode: iterative
+  routing_priority: 0
+  required_capabilities: []
+  consumes: []
+  produces:
+  - clarified_problem.v1
+  source_digest: 31186063f64df46f74de3af3a5653b6d5fa75b049bee6fd80e18ebec05e80524
+- id: steelman-both-sides
+  version: 0.1.0
+  lifecycle: draft
+  primary_role: decide
+  secondary_roles:
+  - clarify
+  - reason
+  interaction_mode: one_shot
+  routing_priority: 0
+  required_capabilities: []
+  consumes:
+  - decision_context.v1
+  - option_set.v1
+  produces:
+  - decision_memo.v1
+  source_digest: e8f04165e64683067ef4db22b521304a61752ccd2e2c2a07d7f0f853e345605f

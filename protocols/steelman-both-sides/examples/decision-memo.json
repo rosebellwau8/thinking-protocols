@@ -1,0 +1,18 @@
+{
+  "type": "decision_memo",
+  "schema_version": "v1",
+  "produced_by": {"protocol": "steelman-both-sides", "protocol_version": "0.1.0"},
+  "provenance": {"input_artifacts": ["option_set.v1", "decision_context.v1"], "sources": ["Fictional team planning note"]},
+  "uncertainty": {"level": "medium", "unresolved": ["Option B recruitment speed is estimated"]},
+  "payload": {
+    "strongest_cases": [
+      {"option": "Option A", "case": "It has the larger documented prospect list"},
+      {"option": "Option B", "case": "Existing relationships may enable faster learning"}
+    ],
+    "decisive_variables": ["Days to five interviews", "Cost per interview"],
+    "recommendation": "Test Option B first",
+    "conditions": ["Reconsider if fewer than five interviews are booked by day 14"],
+    "uncertainty": "The recommendation depends on estimated recruitment speed"
+  }
+}
+

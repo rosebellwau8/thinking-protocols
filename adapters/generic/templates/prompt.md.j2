@@ -1,0 +1,61 @@
+---
+protocol_id: {{ metadata.id }}
+source_version: {{ metadata.version }}
+source_digest: {{ protocol.digest }}
+adapter: generic
+---
+
+# {{ metadata.id }}
+
+## Capability Contract
+
+Required:
+{% for capability in metadata.capabilities.required | sort %}
+- {{ capability }}
+{% else %}
+- None
+{% endfor %}
+
+Optional:
+{% for capability in metadata.capabilities.optional | sort %}
+- {{ capability }}
+{% else %}
+- None
+{% endfor %}
+
+On missing required capability: `{{ metadata.capabilities.on_missing }}`
+
+## Interaction and State Contract
+
+- Interaction mode: `{{ metadata.interaction.mode }}`
+- State required: `{{ metadata.state.required | lower }}`
+{% if metadata.state.lifetime is defined %}
+- State lifetime: `{{ metadata.state.lifetime }}`
+{% endif %}
+
+## Stop Conditions
+
+{% for condition in metadata.stop_conditions %}
+- {{ condition }}
+{% endfor %}
+
+## Artifact Contract
+
+Consumes:
+{% for artifact in metadata.consumes | sort %}
+- {{ artifact }}
+{% else %}
+- None
+{% endfor %}
+
+Produces:
+{% for artifact in metadata.produces | sort %}
+- {{ artifact }}
+{% else %}
+- None
+{% endfor %}
+
+## Canonical Procedure
+
+{{ protocol.body }}
+

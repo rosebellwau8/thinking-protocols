@@ -81,9 +81,11 @@ Routing precedence:
 
 Artifact gaps guide routing but do not override user intent, cost limits, safety constraints, or the direct-answer default. The Router never constructs a full multi-Protocol pipeline merely because a problem appears complex.
 
+When multiple Protocols produce the same Artifact, `routing_priority` provides deterministic precedence. It is a non-negative integer; a larger integer wins and an omitted value has an effective priority of zero. Repository validation requires one unique highest effective priority; equal highest values, including multiple omitted values, are an ambiguity error. This priority is considered only after explicit Protocol selection and the direct-answer policy. It does not override capability, consent, or safety checks.
+
 ## Build and validation
 
-Use Python 3.12, PyYAML, jsonschema, Jinja2, pytest, and a small argparse CLI.
+Use Python 3.11 or newer, PyYAML, jsonschema, Jinja2, pytest, and a small argparse CLI.
 
 Validation has four levels:
 

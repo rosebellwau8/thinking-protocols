@@ -1,0 +1,26 @@
+{
+  "type": "experiment_plan",
+  "schema_version": "v1",
+  "produced_by": {
+    "protocol": "minimum-experiment",
+    "protocol_version": "0.1.0"
+  },
+  "provenance": {
+    "input_artifacts": ["decision_memo.v1"],
+    "sources": ["Fictional outreach estimate"]
+  },
+  "uncertainty": {
+    "level": "medium",
+    "unresolved": ["Response rates may vary by weekday"]
+  },
+  "payload": {
+    "hypothesis": "Warm outreach in Market B can book five qualified interviews within 14 days",
+    "action": "Contact 30 eligible organizations using one reversible outreach script",
+    "budget": "500 units and 12 staff hours",
+    "duration": "14 days",
+    "metrics": ["Qualified interviews booked", "Cost per booked interview"],
+    "continue_threshold": "At least five qualified interviews by day 14",
+    "stop_threshold": "Fewer than two positive replies after 20 contacts",
+    "information_gain": "Estimate reachable demand and recruitment cost before committing to a full launch"
+  }
+}
