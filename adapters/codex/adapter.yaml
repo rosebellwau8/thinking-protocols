@@ -1,0 +1,9 @@
+id: codex
+output: dist/codex
+supports:
+  commands: false
+  skills: true
+  persistent_state: false
+  tool_binding: true
+template: templates/SKILL.md.j2
+

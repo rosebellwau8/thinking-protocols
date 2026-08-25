@@ -16,3 +16,9 @@ dist/*
 !dist/generic/
 dist/generic/*
 !dist/generic/*.md
+!dist/codex/
+dist/codex/*
+!dist/codex/skills/
+dist/codex/skills/*
+!dist/codex/skills/*/
+!dist/codex/skills/*/SKILL.md

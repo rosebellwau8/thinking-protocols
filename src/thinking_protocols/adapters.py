@@ -2,10 +2,12 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Any
+import json
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 import yaml
 
+from thinking_protocols.conformance import canonical_invariants
 from thinking_protocols.protocols import Protocol, load_protocol
 from thinking_protocols.validation import validate_repository
 
@@ -48,6 +50,17 @@ def build_adapter(
             protocol=protocol,
             metadata=protocol.metadata,
             adapter=manifest,
+            required_capabilities_json=json.dumps(
+                sorted(protocol.metadata["capabilities"]["required"]),
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ),
+            invariants_json=json.dumps(
+                canonical_invariants(protocol),
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ),
         )
         content = _normalize_lf(rendered).rstrip("\n") + "\n"
         _write_if_changed(output, content.encode("utf-8"))
