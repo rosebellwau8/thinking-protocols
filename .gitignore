@@ -10,5 +10,6 @@ htmlcov/
 build/
 generated/*
 !generated/.gitkeep
+!generated/registry.yaml
 dist/*
 !dist/.gitkeep
