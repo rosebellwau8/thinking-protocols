@@ -6,7 +6,7 @@ Goal: Build a validated, Artifact-driven cognitive Protocol library with four pi
 
 Architecture: Protocol semantics live only in protocols/<id>/PROTOCOL.md. Versioned JSON Schema Artifacts are Protocol interfaces. Adapters compile Protocols into runtime-specific packages while conformance checks protect semantic invariants. The Router prefers direct answers and escalates only for an explicit request or a justified Artifact gap.
 
-Tech Stack: Python 3.12, argparse, hashlib, PyYAML, jsonschema, Jinja2, pytest, GitHub Actions.
+Tech Stack: Python 3.11+, argparse, hashlib, PyYAML, jsonschema, Jinja2, pytest, GitHub Actions.
 
 ---
 
@@ -54,7 +54,7 @@ Step 4: Create pyproject.toml with:
 
 - hatchling build backend;
 - package name thinking-protocols;
-- Python >=3.12;
+- Python >=3.11;
 - runtime dependencies Jinja2 >=3.1,<4, jsonschema >=4.23,<5, PyYAML >=6,<7;
 - dev dependencies pytest >=8.3,<9 and pytest-cov >=6,<7;
 - CLI entry point thinking-protocols = thinking_protocols.cli:main;
@@ -558,7 +558,7 @@ Step 4: Add at least ten simple requests spanning facts, formatting, translation
 
 Step 5: Request verified_claims.v1 without web.search. Assert blocked, name the missing capability, and do not substitute another Protocol.
 
-Step 6: Configure GitHub Actions on Windows and Ubuntu with Python 3.12. Install .[dev], run tests, validate Protocols, and check generated output.
+Step 6: Configure GitHub Actions on Windows and Ubuntu with Python 3.11 and 3.12. Install .[dev], run tests, validate Protocols, and check generated output.
 
 Step 7: Write CONTRIBUTING.md with this order:
 

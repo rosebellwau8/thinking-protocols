@@ -83,7 +83,7 @@ Artifact gaps guide routing but do not override user intent, cost limits, safety
 
 ## Build and validation
 
-Use Python 3.12, PyYAML, jsonschema, Jinja2, pytest, and a small argparse CLI.
+Use Python 3.11 or newer, PyYAML, jsonschema, Jinja2, pytest, and a small argparse CLI.
 
 Validation has four levels:
 
