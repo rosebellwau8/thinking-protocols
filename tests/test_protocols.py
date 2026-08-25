@@ -25,6 +25,21 @@ def test_loads_frontmatter_body_and_source_digest(tmp_path: Path) -> None:
     assert protocol.digest == hashlib.sha256(source.encode("utf-8")).hexdigest()
 
 
+def test_digest_is_identical_for_lf_and_crlf_sources(tmp_path: Path) -> None:
+    normalized = "---\nid: example\n---\n\n# Procedure\n"
+    lf_path = tmp_path / "lf.md"
+    crlf_path = tmp_path / "crlf.md"
+    lf_path.write_bytes(normalized.encode("utf-8"))
+    crlf_path.write_bytes(normalized.replace("\n", "\r\n").encode("utf-8"))
+
+    lf_protocol = load_protocol(lf_path)
+    crlf_protocol = load_protocol(crlf_path)
+
+    expected = hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+    assert lf_protocol.digest == expected
+    assert crlf_protocol.digest == expected
+
+
 def test_rejects_missing_frontmatter(tmp_path: Path) -> None:
     path = write_protocol(tmp_path, "# Procedure\n")
 

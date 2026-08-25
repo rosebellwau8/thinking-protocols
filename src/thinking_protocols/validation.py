@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from jsonschema import Draft202012Validator
+from referencing import Registry, Resource
 
 from thinking_protocols.errors import ProtocolParseError
 from thinking_protocols.protocols import Protocol, load_protocol
@@ -44,8 +45,10 @@ def validate_repository(root: Path | str) -> ValidationResult:
 
     protocol_schema = _load_json(repository_root / "schemas" / "protocol.schema.json")
     capability_schema = _load_json(repository_root / "schemas" / "capability.schema.json")
-    validator = Draft202012Validator(protocol_schema)
-    known_capabilities = set(capability_schema.get("examples", ()))
+    registry = Registry().with_resource(
+        capability_schema["$id"], Resource.from_contents(capability_schema)
+    )
+    validator = Draft202012Validator(protocol_schema, registry=registry)
     known_artifacts = _artifact_names(repository_root / "schemas" / "artifacts")
 
     records: list[_ProtocolRecord] = []
@@ -70,7 +73,7 @@ def validate_repository(root: Path | str) -> ValidationResult:
         for error in schema_errors:
             issues.append(
                 ValidationIssue(
-                    code="PROTOCOL_SCHEMA_ERROR",
+                    code=_schema_issue_code(error),
                     path=f"{relative_path}::{_metadata_path(error.absolute_path)}",
                     message=error.message,
                 )
@@ -79,7 +82,7 @@ def validate_repository(root: Path | str) -> ValidationResult:
             records.append(_ProtocolRecord(protocol, relative_path))
 
     issues.extend(
-        _cross_reference_issues(records, known_artifacts, known_capabilities)
+        _cross_reference_issues(records, known_artifacts)
     )
     return ValidationResult(tuple(sorted(issues, key=_issue_sort_key)))
 
@@ -119,10 +122,21 @@ def _metadata_path(parts: Iterable[object]) -> str:
     return path
 
 
+def _schema_issue_code(error: Any) -> str:
+    path = list(error.absolute_path)
+    if (
+        error.validator == "enum"
+        and len(path) >= 3
+        and path[0] == "capabilities"
+        and path[1] in {"required", "optional"}
+    ):
+        return "UNKNOWN_CAPABILITY"
+    return "PROTOCOL_SCHEMA_ERROR"
+
+
 def _cross_reference_issues(
     records: list[_ProtocolRecord],
     known_artifacts: set[str],
-    known_capabilities: set[str],
 ) -> list[ValidationIssue]:
     issues: list[ValidationIssue] = []
     ids: dict[str, list[_ProtocolRecord]] = defaultdict(list)
@@ -143,21 +157,6 @@ def _cross_reference_issues(
                             code=code,
                             path=f"{record.relative_path}::metadata.{field}[{index}]",
                             message=f"Unknown Artifact contract: {artifact}",
-                        )
-                    )
-
-        capabilities = metadata["capabilities"]
-        for field in ("required", "optional"):
-            for index, capability in enumerate(capabilities[field]):
-                if capability not in known_capabilities:
-                    issues.append(
-                        ValidationIssue(
-                            code="UNKNOWN_CAPABILITY",
-                            path=(
-                                f"{record.relative_path}::"
-                                f"metadata.capabilities.{field}[{index}]"
-                            ),
-                            message=f"Unknown capability: {capability}",
                         )
                     )
 

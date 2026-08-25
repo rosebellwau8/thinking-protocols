@@ -147,3 +147,25 @@ def test_unique_highest_routing_priority_resolves_duplicate_producer(tmp_path: P
     add_protocol(root, "second", second)
 
     assert "AMBIGUOUS_ARTIFACT_PRODUCER" not in issue_codes(root)
+
+
+def test_explicit_priority_beats_an_omitted_zero_priority(tmp_path: Path) -> None:
+    root = make_repository(tmp_path)
+    preferred = deepcopy(base_metadata("preferred-producer"))
+    preferred["routing_priority"] = 1
+    add_protocol(root, "preferred", preferred)
+    add_protocol(root, "default", base_metadata("default-producer"))
+
+    assert "AMBIGUOUS_ARTIFACT_PRODUCER" not in issue_codes(root)
+
+
+def test_equal_highest_routing_priorities_remain_ambiguous(tmp_path: Path) -> None:
+    root = make_repository(tmp_path)
+    first = deepcopy(base_metadata("first-producer"))
+    first["routing_priority"] = 10
+    second = deepcopy(base_metadata("second-producer"))
+    second["routing_priority"] = 10
+    add_protocol(root, "first", first)
+    add_protocol(root, "second", second)
+
+    assert "AMBIGUOUS_ARTIFACT_PRODUCER" in issue_codes(root)

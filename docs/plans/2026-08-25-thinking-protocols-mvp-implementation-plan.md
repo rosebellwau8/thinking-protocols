@@ -404,6 +404,7 @@ Step 3: Implement registry records containing:
 - lifecycle status;
 - primary and secondary epistemic roles;
 - interaction mode;
+- effective routing priority, using zero when omitted;
 - required capabilities;
 - consumes and produces;
 - source digest.
@@ -451,7 +452,7 @@ Step 3: Implement fixed precedence:
 5. at most one missing Artifact producer;
 6. capability and consent checks.
 
-Do not call an LLM. Break ties lexicographically in v1 and report a tie reason code.
+Do not call an LLM. Exact Artifact producers use the unique highest effective routing_priority. Repository validation rejects equal highest producer priorities. Break remaining ties, such as primary-role matches, lexicographically in v1 and report a tie reason code.
 
 Step 4: Run tests and commit.
 

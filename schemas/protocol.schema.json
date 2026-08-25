@@ -160,10 +160,7 @@
     "epistemic_role": {
       "enum": ["clarify", "research", "verify", "reason", "decide", "experiment"]
     },
-    "capability": {
-      "type": "string",
-      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+$"
-    },
+    "capability": {"$ref": "capability.schema.json"},
     "capability_list": {
       "type": "array",
       "items": {"$ref": "#/$defs/capability"},

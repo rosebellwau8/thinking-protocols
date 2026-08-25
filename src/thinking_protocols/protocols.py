@@ -54,5 +54,5 @@ def load_protocol(path: Path | str) -> Protocol:
         path=protocol_path,
         metadata=metadata,
         body=body,
-        digest=hashlib.sha256(source_bytes).hexdigest(),
+        digest=hashlib.sha256(normalized.encode("utf-8")).hexdigest(),
     )
