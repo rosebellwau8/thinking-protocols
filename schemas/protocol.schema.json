@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thinking-protocols.local/schemas/protocol.schema.json",
+  "title": "Thinking Protocols Protocol Metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "version",
+    "lifecycle",
+    "source_category",
+    "epistemic_role",
+    "interaction",
+    "state",
+    "capabilities",
+    "inputs",
+    "consumes",
+    "produces",
+    "phases",
+    "stop_conditions",
+    "use_when",
+    "avoid_when",
+    "safety",
+    "source"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$"
+    },
+    "lifecycle": {
+      "enum": ["draft", "stable", "deprecated"]
+    },
+    "source_category": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "epistemic_role": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary", "secondary"],
+      "properties": {
+        "primary": {"$ref": "#/$defs/epistemic_role"},
+        "secondary": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/epistemic_role"},
+          "uniqueItems": true
+        }
+      }
+    },
+    "interaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode"],
+      "properties": {
+        "mode": {"enum": ["one_shot", "iterative"]},
+        "max_turns": {"type": "integer", "minimum": 1}
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required"],
+      "properties": {
+        "required": {"type": "boolean"},
+        "lifetime": {"enum": ["turn", "conversation", "persistent"]}
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "optional", "on_missing"],
+      "properties": {
+        "required": {"$ref": "#/$defs/capability_list"},
+        "optional": {"$ref": "#/$defs/capability_list"},
+        "on_missing": {"enum": ["block", "degrade", "ask_user"]}
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "optional"],
+      "properties": {
+        "required": {"$ref": "#/$defs/input_list"},
+        "optional": {"$ref": "#/$defs/input_list"}
+      }
+    },
+    "consumes": {"$ref": "#/$defs/artifact_list"},
+    "produces": {"$ref": "#/$defs/artifact_list"},
+    "phases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "objective"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "objective": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "stop_conditions": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "use_when": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "avoid_when": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "safety": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relationship", "references"],
+      "properties": {
+        "relationship": {
+          "enum": ["original", "inspiration_for_independent_rewrite"]
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  },
+  "$defs": {
+    "epistemic_role": {
+      "enum": ["clarify", "research", "verify", "reason", "decide", "experiment"]
+    },
+    "capability": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+$"
+    },
+    "capability_list": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/capability"},
+      "uniqueItems": true
+    },
+    "input_list": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]*$"
+      },
+      "uniqueItems": true
+    },
+    "artifact_list": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]*\\.v[1-9][0-9]*$"
+      },
+      "uniqueItems": true
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "interaction": {
+            "properties": {"mode": {"const": "iterative"}},
+            "required": ["mode"]
+          }
+        },
+        "required": ["interaction"]
+      },
+      "then": {
+        "properties": {
+          "stop_conditions": {"minItems": 1}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "properties": {"required": {"const": true}},
+            "required": ["required"]
+          }
+        },
+        "required": ["state"]
+      },
+      "then": {
+        "properties": {
+          "state": {"required": ["lifetime"]}
+        }
+      }
+    }
+  ]
+}
