@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "thinking-protocols"
+version = "0.1.0"
+description = "Artifact-driven cognitive protocols with deterministic adapters"
+requires-python = ">=3.12"
+dependencies = [
+  "Jinja2>=3.1,<4",
+  "jsonschema>=4.23,<5",
+  "PyYAML>=6,<7",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3,<9",
+  "pytest-cov>=6,<7",
+]
+
+[project.scripts]
+thinking-protocols = "thinking_protocols.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/thinking_protocols"]
