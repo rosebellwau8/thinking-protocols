@@ -35,6 +35,10 @@
     "lifecycle": {
       "enum": ["draft", "stable", "deprecated"]
     },
+    "routing_priority": {
+      "type": "integer",
+      "minimum": 1
+    },
     "source_category": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9_]*$"
