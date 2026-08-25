@@ -13,3 +13,6 @@ generated/*
 !generated/registry.yaml
 dist/*
 !dist/.gitkeep
+!dist/generic/
+dist/generic/*
+!dist/generic/*.md
