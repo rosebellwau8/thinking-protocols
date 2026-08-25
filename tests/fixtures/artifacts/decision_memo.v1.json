@@ -1,0 +1,27 @@
+{
+  "type": "decision_memo",
+  "schema_version": "v1",
+  "produced_by": {
+    "protocol": "steelman-both-sides",
+    "protocol_version": "0.1.0"
+  },
+  "provenance": {
+    "input_artifacts": ["option_set.v1", "decision_context.v1", "verified_claims.v1"],
+    "sources": ["Fictional pilot comparison"]
+  },
+  "uncertainty": {
+    "level": "medium",
+    "unresolved": ["Market B recruitment speed is based on a small sample"]
+  },
+  "payload": {
+    "strongest_cases": [
+      {"option": "Market A", "case": "The addressable list is larger and better documented"},
+      {"option": "Market B", "case": "Existing relationships may shorten recruitment time"}
+    ],
+    "decisive_variables": ["Days to first five qualified interviews", "Cost per interview"],
+    "recommendation": "Run the Market B pilot first",
+    "conditions": ["Stop if fewer than five interviews are booked by day 14"],
+    "uncertainty": "The recommendation depends on unverified recruitment speed"
+  }
+}
+

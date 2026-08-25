@@ -1,0 +1,25 @@
+{
+  "type": "clarified_problem",
+  "schema_version": "v1",
+  "produced_by": {
+    "protocol": "socratic-questioning",
+    "protocol_version": "0.1.0"
+  },
+  "provenance": {
+    "input_artifacts": [],
+    "sources": ["User statement about choosing a pilot market"]
+  },
+  "uncertainty": {
+    "level": "medium",
+    "unresolved": ["The available weekly time is not confirmed"]
+  },
+  "payload": {
+    "original": "Which market should the team enter?",
+    "reframed": "Which one of two candidate markets can be tested within four weeks and the stated budget?",
+    "confirmed_facts": ["The team can run one pilot"],
+    "unverified_assumptions": ["Both markets have reachable customers"],
+    "key_variables": ["Recruitment time", "Pilot cost"],
+    "next_actionable_question": "What is the maximum pilot budget?"
+  }
+}
+

@@ -1,0 +1,20 @@
+{
+  "type": "option_set",
+  "schema_version": "v1",
+  "produced_by": {
+    "protocol": "option-framing",
+    "protocol_version": "0.1.0"
+  },
+  "provenance": {
+    "input_artifacts": ["clarified_problem.v1"],
+    "sources": ["Fictional team workshop"]
+  },
+  "uncertainty": {
+    "level": "low",
+    "unresolved": []
+  },
+  "payload": {
+    "options": ["Run a Market A pilot", "Run a Market B pilot"]
+  }
+}
+

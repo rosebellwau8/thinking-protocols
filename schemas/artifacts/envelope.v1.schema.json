@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thinking-protocols.local/schemas/artifacts/envelope.v1.schema.json",
+  "title": "Thinking Protocols Artifact Envelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "schema_version", "produced_by", "provenance", "uncertainty", "payload"],
+  "properties": {
+    "type": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+    "schema_version": {"type": "string", "pattern": "^v[1-9][0-9]*$"},
+    "produced_by": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["protocol", "protocol_version"],
+      "properties": {
+        "protocol": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"},
+        "protocol_version": {"type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input_artifacts", "sources"],
+      "properties": {
+        "input_artifacts": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*\\.v[1-9][0-9]*$"},
+          "uniqueItems": true
+        },
+        "sources": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      }
+    },
+    "uncertainty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "unresolved"],
+      "properties": {
+        "level": {"enum": ["low", "medium", "high", "unknown"]},
+        "unresolved": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      }
+    },
+    "payload": {"type": "object"}
+  }
+}
+

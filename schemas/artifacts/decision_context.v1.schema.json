@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thinking-protocols.local/schemas/artifacts/decision_context.v1.schema.json",
+  "title": "Decision Context Artifact v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "schema_version", "produced_by", "provenance", "uncertainty", "payload"],
+  "properties": {
+    "type": {"const": "decision_context"},
+    "schema_version": {"const": "v1"},
+    "produced_by": {"$ref": "#/$defs/produced_by"},
+    "provenance": {"$ref": "#/$defs/provenance"},
+    "uncertainty": {"$ref": "#/$defs/uncertainty"},
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["goal", "constraints", "preferences", "reversibility"],
+      "properties": {
+        "goal": {"type": "string", "minLength": 1},
+        "constraints": {"$ref": "#/$defs/string_list"},
+        "preferences": {"$ref": "#/$defs/string_list"},
+        "reversibility": {"enum": ["reversible", "partially_reversible", "irreversible"]}
+      }
+    }
+  },
+  "$defs": {
+    "produced_by": {"type": "object", "additionalProperties": false, "required": ["protocol", "protocol_version"], "properties": {"protocol": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"}, "protocol_version": {"type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"}}},
+    "provenance": {"type": "object", "additionalProperties": false, "required": ["input_artifacts", "sources"], "properties": {"input_artifacts": {"type": "array", "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*\\.v[1-9][0-9]*$"}, "uniqueItems": true}, "sources": {"$ref": "#/$defs/string_list"}}},
+    "uncertainty": {"type": "object", "additionalProperties": false, "required": ["level", "unresolved"], "properties": {"level": {"enum": ["low", "medium", "high", "unknown"]}, "unresolved": {"$ref": "#/$defs/string_list"}}},
+    "string_list": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+  }
+}
