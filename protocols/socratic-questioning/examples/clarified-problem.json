@@ -1,0 +1,16 @@
+{
+  "type": "clarified_problem",
+  "schema_version": "v1",
+  "produced_by": {"protocol": "socratic-questioning", "protocol_version": "0.1.0"},
+  "provenance": {"input_artifacts": [], "sources": ["User-provided planning question"]},
+  "uncertainty": {"level": "medium", "unresolved": ["Available weekly time is unconfirmed"]},
+  "payload": {
+    "original": "Should I launch this project?",
+    "reframed": "Can a two-week test establish demand without exceeding the user's time limit?",
+    "confirmed_facts": ["The user can run one small test"],
+    "unverified_assumptions": ["Potential users can be reached this month"],
+    "key_variables": ["Qualified replies", "Hours required"],
+    "next_actionable_question": "What weekly time limit should the test respect?"
+  }
+}
+

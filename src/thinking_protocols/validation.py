@@ -8,6 +8,7 @@ from typing import Any, Iterable
 
 from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
+import yaml
 
 from thinking_protocols.errors import ProtocolParseError
 from thinking_protocols.protocols import Protocol, load_protocol
@@ -84,6 +85,9 @@ def validate_repository(root: Path | str) -> ValidationResult:
     issues.extend(
         _cross_reference_issues(records, known_artifacts)
     )
+    evals_schema_path = repository_root / "schemas" / "evals.schema.json"
+    if evals_schema_path.is_file():
+        issues.extend(_eval_issues(records, _load_json(evals_schema_path)))
     return ValidationResult(tuple(sorted(issues, key=_issue_sort_key)))
 
 
@@ -202,3 +206,64 @@ def _cross_reference_issues(
 
 def _issue_sort_key(issue: ValidationIssue) -> tuple[str, str, str]:
     return issue.path, issue.code, issue.message
+
+
+def _eval_issues(
+    records: list[_ProtocolRecord], evals_schema: dict[str, Any]
+) -> list[ValidationIssue]:
+    issues: list[ValidationIssue] = []
+    validator = Draft202012Validator(evals_schema)
+    for record in records:
+        evals_path = record.protocol.path.parent / "evals.yaml"
+        relative_path = f"{record.relative_path.rsplit('/', 1)[0]}/evals.yaml"
+        if not evals_path.is_file():
+            issues.append(
+                ValidationIssue(
+                    code="MISSING_EVALS",
+                    path=relative_path,
+                    message="Protocol is missing evals.yaml",
+                )
+            )
+            continue
+        try:
+            evals = yaml.safe_load(evals_path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, yaml.YAMLError) as error:
+            issues.append(
+                ValidationIssue(
+                    code="EVALS_PARSE_ERROR",
+                    path=relative_path,
+                    message=f"Could not parse evals.yaml: {error}",
+                )
+            )
+            continue
+        schema_errors = sorted(
+            validator.iter_errors(evals),
+            key=lambda error: tuple(str(part) for part in error.absolute_path),
+        )
+        for error in schema_errors:
+            issues.append(
+                ValidationIssue(
+                    code="EVALS_SCHEMA_ERROR",
+                    path=f"{relative_path}::{_eval_path(error.absolute_path)}",
+                    message=error.message,
+                )
+            )
+        if not schema_errors and evals["protocol_id"] != record.protocol.metadata["id"]:
+            issues.append(
+                ValidationIssue(
+                    code="EVALS_PROTOCOL_MISMATCH",
+                    path=f"{relative_path}::protocol_id",
+                    message="evals.yaml protocol_id does not match Protocol id",
+                )
+            )
+    return issues
+
+
+def _eval_path(parts: Iterable[object]) -> str:
+    path = "evals"
+    for part in parts:
+        if isinstance(part, int):
+            path += f"[{part}]"
+        else:
+            path += f".{part}"
+    return path

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thinking-protocols.local/schemas/evals.schema.json",
+  "title": "Thinking Protocols Evaluation Cases",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["protocol_id", "cases"],
+  "properties": {
+    "protocol_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "category", "input", "expected"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "category": {
+            "enum": [
+              "should_trigger",
+              "should_not_trigger",
+              "missing_input",
+              "early_stop",
+              "unsafe_or_sensitive",
+              "missing_required_capability"
+            ]
+          },
+          "input": {"type": "string", "minLength": 1},
+          "expected": {
+            "enum": ["run_protocol", "direct_answer", "request_input", "stop", "blocked"]
+          }
+        },
+        "allOf": [
+          {"if": {"properties": {"category": {"const": "should_trigger"}}}, "then": {"properties": {"expected": {"const": "run_protocol"}}}},
+          {"if": {"properties": {"category": {"const": "should_not_trigger"}}}, "then": {"properties": {"expected": {"const": "direct_answer"}}}},
+          {"if": {"properties": {"category": {"const": "missing_input"}}}, "then": {"properties": {"expected": {"const": "request_input"}}}},
+          {"if": {"properties": {"category": {"const": "early_stop"}}}, "then": {"properties": {"expected": {"const": "stop"}}}},
+          {"if": {"properties": {"category": {"const": "unsafe_or_sensitive"}}}, "then": {"properties": {"expected": {"const": "blocked"}}}},
+          {"if": {"properties": {"category": {"const": "missing_required_capability"}}}, "then": {"properties": {"expected": {"const": "blocked"}}}}
+        ]
+      }
+    }
+  }
+}

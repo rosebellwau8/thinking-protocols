@@ -169,3 +169,15 @@ def test_equal_highest_routing_priorities_remain_ambiguous(tmp_path: Path) -> No
     add_protocol(root, "second", second)
 
     assert "AMBIGUOUS_ARTIFACT_PRODUCER" in issue_codes(root)
+
+
+def test_malformed_evals_are_reported_structurally(tmp_path: Path) -> None:
+    root = make_repository(tmp_path)
+    shutil.copy(PROJECT_ROOT / "schemas" / "evals.schema.json", root / "schemas")
+    protocol_path = add_protocol(root, "example", base_metadata())
+    (protocol_path.parent / "evals.yaml").write_text(
+        "protocol_id: example-protocol\ncases:\n  - category: should_trigger\n",
+        encoding="utf-8",
+    )
+
+    assert "EVALS_SCHEMA_ERROR" in issue_codes(root)
