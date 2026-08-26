@@ -1,17 +1,27 @@
 # Thinking Protocols
 
-Thinking Protocols is an Artifact-driven library of machine-readable cognitive workflows. Canonical Protocol semantics live in `protocols/<id>/PROTOCOL.md`; registries and runtime packages are generated from those sources.
+Thinking Protocols is an Artifact-driven library of machine-readable cognitive workflows. Canonical semantics live only in `protocols/<id>/PROTOCOL.md`; registries and runtime packages are deterministic generated views.
 
-The v0.1.0 MVP contains four independently authored Protocols:
+Version 0.2.0 contains the complete twelve-Protocol library:
 
-| Protocol | Primary role | Output |
-| --- | --- | --- |
-| Socratic Questioning | Clarify | `clarified_problem.v1` |
-| Fact Checking | Verify | `verified_claims.v1` |
-| Steelman Both Sides | Decide | `decision_memo.v1` |
-| Minimum Experiment | Experiment | `experiment_plan.v1` |
+| Protocol | Primary role | Use it for | Output |
+| --- | --- | --- | --- |
+| `socratic-questioning` | Clarify | Reframing an ambiguous consequential problem with bounded questioning. | `clarified_problem.v1` |
+| `fact-checking` | Verify | Checking externally verifiable claims against dated evidence. | `verified_claims.v1` |
+| `steelman-both-sides` | Decide | Comparing the strongest credible cases for real options. | `decision_memo.v1` |
+| `minimum-experiment` | Experiment | Designing the smallest safe, reversible test of a decision uncertainty. | `experiment_plan.v1` |
+| `dual-layer-explanation` | Reason | Giving compatible intuitive and mechanism-level explanations. | Terminal output |
+| `reverse-engineering` | Reason | Working backward from an existing outcome to mechanisms and a minimal reconstruction. | Terminal output |
+| `horizontal-vertical-analysis` | Research | Crossing historical evolution with evidence-backed peer or alternative comparison. | Terminal output |
+| `expert-panel` | Reason | Comparing explicitly defined analytical lenses without impersonating real experts. | Terminal output |
+| `first-principles` | Reason | Re-deriving options from facts, hard constraints, goals, and stated assumptions. | Terminal output |
+| `cross-domain-transfer` | Reason | Transferring an evidenced mechanism across domains through structural matching and tests. | Terminal output |
+| `talent-discovery` | Clarify | Forming non-diagnostic, reality-testable talent hypotheses with consent. | Terminal output |
+| `life-design` | Decide | Turning current reality and values into feasible options and reversible experiments. | Terminal output |
 
-See [the architecture](docs/architecture.md) for the domain model and routing contract.
+Terminal outputs are intentionally not typed Artifacts when no downstream Protocol consumes them. This keeps the seven v0.1 Artifact contracts unchanged and avoids persistent sensitive data.
+
+See [the architecture](docs/architecture.md) for the frozen domain model and routing contract.
 
 ## Requirements and installation
 
@@ -22,7 +32,7 @@ python -m venv .venv
 python -m pip install -e ".[dev]"
 ```
 
-Activate the virtual environment using the command appropriate for your shell, or invoke its Python and console script directly.
+Activate the environment for your shell, or invoke its Python and console script directly.
 
 ## Validate and build
 
@@ -32,31 +42,33 @@ thinking-protocols build-registry
 thinking-protocols build --adapter generic
 thinking-protocols build --adapter codex
 thinking-protocols check-generated
-python -m pytest
+python -m pytest --cov=thinking_protocols --cov-fail-under=90
 ```
 
-`validate` checks Protocol schemas, Artifact schemas and examples, evaluation structure, cross-references, capability identifiers, and repository policy. `check-generated` rebuilds all generated targets in a temporary directory and fails if tracked output is stale.
+`validate` checks Protocol schemas, evaluation structure and required categories, Artifact and capability cross-references, and producer priority. `check-generated` rebuilds every generated target in a temporary directory and fails on missing, extra, or stale output.
 
 ## Routing behavior
 
-The Router defaults to a direct answer for simple, bounded requests. An explicit Protocol request has precedence when its requirements can be met. For inferred routing, the Router selects the smallest suitable Protocol and adds at most one prerequisite to fill a required Artifact gap.
+The Router prefers a direct answer for simple, bounded requests. Ordinary explanations, factual questions, translations, formatting, and generic analysis do not opt into specialized Protocols. An explicit Protocol request has precedence when its capability and consent requirements can be met.
 
-`routing_priority` is a non-negative integer used only to break ties among otherwise suitable producers: larger values win and omission means zero. It cannot override explicit Protocol selection, the direct-answer default, capability blocking, consent requirements, or safety constraints.
+For inferred routing, an exact desired Artifact selects its producer and may add at most one prerequisite for a real Artifact gap. `routing_priority` breaks Artifact-producer ties only; it cannot override an explicit request, direct-answer policy, missing capability, or consent gate. A primary-role request shared by multiple specialized Protocols stays a direct answer instead of choosing one by name order.
+
+`horizontal-vertical-analysis` and `cross-domain-transfer` require `web.search`; missing search blocks rather than substituting model memory. `talent-discovery`, `life-design`, and all other iterative Protocols require user consent. Their state is conversation-scoped and never persistent by default.
 
 ## Adapter invariants
 
-Adapters may change packaging, filenames, metadata syntax, invocation commands, capability bindings, and presentation. They must preserve applicability, required inputs, phase order, stopping conditions, Artifact contracts, evidence rules, safety constraints, Protocol version, and the LF-normalized source digest. Conformance checks compare these invariant fields with the canonical Protocol.
+Adapters may change packaging, filenames, metadata syntax, invocation commands, capability bindings, and presentation. They must preserve interaction and state, capabilities, required inputs, phase order, stop conditions, Artifact contracts, evidence rules, safety boundaries, Protocol version, and the LF-normalized source digest.
 
-The Generic adapter emits standalone Markdown prompts under `dist/generic/`. The Codex adapter emits skill packages under `dist/codex/skills/`.
+The Generic adapter emits standalone Markdown under `dist/generic/`. The Codex adapter emits skill packages under `dist/codex/skills/`. Each generated file records its source Protocol version and digest.
 
 ## Generated files
 
-`generated/registry.yaml` and all files under `dist/` are deterministic build output. Do not edit them by hand. Change canonical Protocols, schemas, or adapter templates, then run the corresponding build commands and commit the regenerated files. Authored and generated text uses UTF-8 with LF newlines.
+`generated/registry.yaml` and all files under `dist/` are generated output. Do not edit them by hand. Change canonical Protocols, schemas, or adapter templates, then run the build commands and commit the regenerated files. Authored and generated text uses UTF-8 with LF newlines.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the required contribution order.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution order.
 
-## MVP boundaries
+## Boundaries and provenance
 
-The MVP intentionally excludes hosted services, LLM API integration, persistent runtimes, databases, user interfaces, plugin systems, semantic or LLM-assisted routing, and the eight deferred Protocol migrations. Sensitive self-exploration workflows remain out of scope until privacy, deletion, consent, and non-diagnostic safeguards are defined.
+This remains a workflow library and build system, not an autonomous agent, hosted LLM application, semantic router, database, persistent runtime, or universal reasoning pipeline. Self-exploration Protocols are non-diagnostic and do not replace medical, mental-health, legal, or financial professionals.
 
-Original repository material is licensed under the Apache License 2.0. Third-party articles and Prompt bodies are not part of this repository or its license. Provenance records attribute inspiration without importing third-party text or licensing terms. See [NOTICE.md](NOTICE.md).
+Original repository material is licensed under Apache-2.0. Third-party articles and Prompt bodies are not part of this repository or its license. Provenance records attribute inspiration and map each method to an independent rewrite without importing third-party text or licensing terms. See [NOTICE.md](NOTICE.md) and [source notes](sources/kazike-12-prompts/notes.md).

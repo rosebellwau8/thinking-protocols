@@ -1,15 +1,24 @@
 # Source notes
 
-This record attributes a public article that grouped reusable thinking prompts around five broad kinds of work:
+This record attributes a public article that grouped twelve reusable thinking prompts. The repository does not preserve the article's Prompt bodies, excerpts, or corpus. The URL and bibliographic metadata exist for attribution and research traceability only; the linked material remains outside this repository and its Apache-2.0 license.
 
-1. Clarifying an unclear problem before attempting a solution.
-2. Separating factual verification from inference and personal values.
-3. Comparing opposing positions fairly enough to support a decision.
-4. Turning uncertainty into a small, reversible experiment.
-5. Exploring personal or sensitive questions that require additional privacy and non-diagnostic safeguards.
+Each canonical Protocol is an independent rewrite from the high-level method, intended outcome, and safety requirements. The one-to-one mapping is:
 
-The repository does not preserve the article's Prompt bodies. It extracts only the high-level observation that recurring cognitive work can be represented as explicit procedures.
+| Source-method label | Canonical Protocol | Independent abstraction |
+| --- | --- | --- |
+| Socratic questioning | `socratic-questioning` | Bounded clarification ending in a user-confirmed problem statement. |
+| Fact checking | `fact-checking` | Dated evidence verification that separates facts, inference, and values. |
+| Steelman both sides | `steelman-both-sides` | Fair comparison of credible options and a conditional decision memo. |
+| Minimum experiment | `minimum-experiment` | Small reversible tests with thresholds and information value. |
+| Dual-layer explanation | `dual-layer-explanation` | Fact-consistent intuitive and mechanism-level explanations of one topic. |
+| Reverse engineering | `reverse-engineering` | Backward analysis of an existing outcome into mechanisms and a minimal reconstruction. |
+| Horizontal-vertical analysis | `horizontal-vertical-analysis` | Tool-aware research crossing historical evolution with current peer comparison. |
+| Expert panel | `expert-panel` | Simulated analytical roles that interpret shared evidence without impersonating real experts. |
+| First principles | `first-principles` | Derivation from evidence-backed facts, hard constraints, goals, and explicit assumptions. |
+| Cross-domain transfer | `cross-domain-transfer` | Evidence-backed mechanism transfer with structural matching and falsifiable tests. |
+| Talent discovery | `talent-discovery` | Consent-gated, non-diagnostic hypotheses from behavior, feedback, outcomes, and counterexamples. |
+| Life design | `life-design` | Consent-gated planning from present constraints toward reversible life-design experiments. |
 
-Thinking Protocols introduces a new abstraction around that observation: each independently written Protocol declares applicability, inputs, ordered phases, stopping rules, capability requirements, safety boundaries, and typed Artifact outputs. Artifacts form stable interfaces between Protocols, while thin Adapters package the same semantics for different runtimes. This makes validation, routing, provenance, and semantic conformance testable without treating Prompt prose as the canonical asset.
+Thinking Protocols adds the repository's own machine-readable abstraction: every Protocol declares applicability, inputs, ordered phases, stopping rules, capability requirements, safety boundaries, and Artifact interfaces. Thin Adapters package those semantics for runtimes without becoming a second semantic source.
 
-The first four categories inform the v0.1.0 pilots. Sensitive self-exploration is deliberately deferred until consent, privacy, retention, deletion, and non-diagnostic policies are defined.
+No third-party wording is required to build, test, route, or use these Protocols. The two self-exploration Protocols intentionally produce terminal, conversation-scoped output rather than persistent sensitive Artifacts. The two research-dependent additions require `web.search` so externally checkable examples are not invented from model memory.

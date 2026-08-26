@@ -6,4 +6,16 @@ url: https://mp.weixin.qq.com/s/NAdhdFrUq9-BKelqzqpwBQ
 relationship: inspiration_for_independent_rewrite
 rights_status: third_party_not_licensed_by_this_repository
 full_text_stored: false
-
+protocol_mappings:
+  - socratic-questioning
+  - fact-checking
+  - steelman-both-sides
+  - minimum-experiment
+  - dual-layer-explanation
+  - reverse-engineering
+  - horizontal-vertical-analysis
+  - expert-panel
+  - first-principles
+  - cross-domain-transfer
+  - talent-discovery
+  - life-design
