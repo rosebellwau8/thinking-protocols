@@ -22,7 +22,7 @@ def test_registry_has_one_record_per_protocol_in_id_order() -> None:
     ids = [record["id"] for record in records]
 
     assert ids == sorted(ids)
-    assert len(ids) == len(set(ids)) == 4
+    assert len(ids) == len(set(ids)) == 12
 
 
 def test_registry_records_canonical_metadata_and_effective_priority() -> None:

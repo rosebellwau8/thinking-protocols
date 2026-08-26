@@ -29,7 +29,8 @@
               "missing_input",
               "early_stop",
               "unsafe_or_sensitive",
-              "missing_required_capability"
+              "missing_required_capability",
+              "evidence_conflict"
             ]
           },
           "input": {"type": "string", "minLength": 1},
@@ -43,7 +44,8 @@
           {"if": {"properties": {"category": {"const": "missing_input"}}}, "then": {"properties": {"expected": {"const": "request_input"}}}},
           {"if": {"properties": {"category": {"const": "early_stop"}}}, "then": {"properties": {"expected": {"const": "stop"}}}},
           {"if": {"properties": {"category": {"const": "unsafe_or_sensitive"}}}, "then": {"properties": {"expected": {"const": "blocked"}}}},
-          {"if": {"properties": {"category": {"const": "missing_required_capability"}}}, "then": {"properties": {"expected": {"const": "blocked"}}}}
+          {"if": {"properties": {"category": {"const": "missing_required_capability"}}}, "then": {"properties": {"expected": {"const": "blocked"}}}},
+          {"if": {"properties": {"category": {"const": "evidence_conflict"}}}, "then": {"properties": {"expected": {"const": "run_protocol"}}}}
         ]
       }
     }

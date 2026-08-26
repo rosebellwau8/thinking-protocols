@@ -24,4 +24,7 @@ cases:
     category: missing_required_capability
     input: Claim external verification even though web search is unavailable.
     expected: blocked
-
+  - id: primary_sources_disagree
+    category: evidence_conflict
+    input: Two dated primary sources make incompatible claims within the same verification scope.
+    expected: run_protocol

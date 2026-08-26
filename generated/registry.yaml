@@ -1,5 +1,43 @@
 schema_version: v1
 protocols:
+- id: cross-domain-transfer
+  version: 0.1.0
+  lifecycle: draft
+  primary_role: reason
+  secondary_roles:
+  - experiment
+  - research
+  interaction_mode: one_shot
+  routing_priority: 0
+  required_capabilities:
+  - web.search
+  consumes: []
+  produces: []
+  source_digest: 0744aff5a3e0a69533e5dc500448053f8057dd301adfcb472ad5d267cedfba0c
+- id: dual-layer-explanation
+  version: 0.1.0
+  lifecycle: draft
+  primary_role: reason
+  secondary_roles:
+  - clarify
+  interaction_mode: one_shot
+  routing_priority: 0
+  required_capabilities: []
+  consumes: []
+  produces: []
+  source_digest: e4d27172d213a4c52b6bab6353ffb64b97f254c3f0424f7db67bdaf7219dcbb5
+- id: expert-panel
+  version: 0.1.0
+  lifecycle: draft
+  primary_role: reason
+  secondary_roles:
+  - decide
+  interaction_mode: one_shot
+  routing_priority: 0
+  required_capabilities: []
+  consumes: []
+  produces: []
+  source_digest: 2313ebb2ef188fc0582a0da472419b5a8812d45c7a03755b9e6a021a54600fc6
 - id: fact-checking
   version: 0.1.0
   lifecycle: draft
@@ -15,6 +53,46 @@ protocols:
   produces:
   - verified_claims.v1
   source_digest: 440113d8de5ee41e749b2250f55511d9175ef42ca60db436079961c63e9e69d1
+- id: first-principles
+  version: 0.1.0
+  lifecycle: draft
+  primary_role: reason
+  secondary_roles:
+  - clarify
+  - decide
+  interaction_mode: one_shot
+  routing_priority: 0
+  required_capabilities: []
+  consumes: []
+  produces: []
+  source_digest: e765343dc7a76cb8e3248f4c75925a5610c5fd3d2616129355b4f6b2f93bfb70
+- id: horizontal-vertical-analysis
+  version: 0.1.0
+  lifecycle: draft
+  primary_role: research
+  secondary_roles:
+  - reason
+  - verify
+  interaction_mode: one_shot
+  routing_priority: 0
+  required_capabilities:
+  - web.search
+  consumes: []
+  produces: []
+  source_digest: 8b0abca5f6ff4ab21b4ce1aea2c30fd685b9f08821a3ffed3c761936d0c62b5b
+- id: life-design
+  version: 0.1.0
+  lifecycle: draft
+  primary_role: decide
+  secondary_roles:
+  - clarify
+  - experiment
+  interaction_mode: iterative
+  routing_priority: 0
+  required_capabilities: []
+  consumes: []
+  produces: []
+  source_digest: 42325a946a73014603d6e8de06a5e8a339400250ec8f46cafb17a99489e6512a
 - id: minimum-experiment
   version: 0.1.0
   lifecycle: draft
@@ -29,6 +107,19 @@ protocols:
   produces:
   - experiment_plan.v1
   source_digest: b84f893ede4c01fe60036013f42a2212e64c816e7aef923deaefdc5b30eb9d36
+- id: reverse-engineering
+  version: 0.1.0
+  lifecycle: draft
+  primary_role: reason
+  secondary_roles:
+  - experiment
+  - research
+  interaction_mode: one_shot
+  routing_priority: 0
+  required_capabilities: []
+  consumes: []
+  produces: []
+  source_digest: 28c0cf24dce796b47aa0e49ee9f22abaf14a615ef846b9301f48ef129e03e87c
 - id: socratic-questioning
   version: 0.1.0
   lifecycle: draft
@@ -57,3 +148,16 @@ protocols:
   produces:
   - decision_memo.v1
   source_digest: e8f04165e64683067ef4db22b521304a61752ccd2e2c2a07d7f0f853e345605f
+- id: talent-discovery
+  version: 0.1.0
+  lifecycle: draft
+  primary_role: clarify
+  secondary_roles:
+  - experiment
+  - reason
+  interaction_mode: iterative
+  routing_priority: 0
+  required_capabilities: []
+  consumes: []
+  produces: []
+  source_digest: 1b89d8869111eb0b05987721acad0f8385d0fd829d0e59d691a00ca4ddd40855

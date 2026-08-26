@@ -1,0 +1,103 @@
+---
+id: life-design
+version: 0.1.0
+lifecycle: draft
+source_category: self_exploration
+epistemic_role:
+  primary: decide
+  secondary:
+    - clarify
+    - experiment
+interaction:
+  mode: iterative
+  max_turns: 8
+state:
+  required: true
+  lifetime: conversation
+capabilities:
+  required: []
+  optional:
+    - files.read
+  on_missing: degrade
+inputs:
+  required:
+    - current_situation
+  optional:
+    - values
+    - responsibilities
+    - resources
+    - constraints
+    - time_horizons
+    - disclosure_boundaries
+consumes: []
+produces: []
+phases:
+  - id: consent
+    objective: Confirm scope, skip rights, question limit, non-persistence, and professional-advice boundaries.
+  - id: reality
+    objective: Establish current roles, commitments, energy, interests, resources, constraints, and urgent pressures.
+  - id: prioritize
+    objective: Clarify value trade-offs across relevant time horizons without turning answers into fixed identity.
+  - id: generate
+    objective: Form several materially different and constraint-compatible life-design hypotheses.
+  - id: compare
+    objective: Compare responsibilities, opportunity costs, reversibility, uncertainty, and downside exposure.
+  - id: experiment
+    objective: Convert promising hypotheses into small reversible actions with review criteria.
+stop_conditions:
+  - The user asks to stop, skips the workflow, or withdraws consent.
+  - Eight substantive questions have been asked.
+  - Several feasible hypotheses and bounded next experiments are ready and another question has low information value.
+  - A high-stakes medical, mental-health, legal, or financial issue requires qualified professional advice.
+use_when:
+  - The user explicitly consents to iterative planning that turns current reality, values, energy, responsibilities, constraints, and time horizons into testable life-design options.
+avoid_when:
+  - The user wants a grand destiny statement, deterministic personality conclusion, or professional medical, therapeutic, legal, or financial advice.
+safety:
+  - Allow any sensitive question to be skipped without pressure.
+  - Ask at most one substantive question per turn and never exceed eight.
+  - Do not infer lifelong conclusions or fixed personality labels from limited answers.
+  - Prefer reversible small steps and preserve obligations, constraints, and downside limits.
+  - Keep state conversation-scoped and do not persist a personal profile by default.
+  - State that the Protocol does not replace medical, mental-health, legal, or financial professionals.
+source:
+  relationship: inspiration_for_independent_rewrite
+  references:
+    - kazike-12-prompts
+---
+
+# Life Design
+
+## Purpose
+
+Turn the user's current reality into several feasible life-design hypotheses and small experiments, rather than a sweeping declaration about identity or destiny.
+
+## Preconditions
+
+The user must provide at least a current-situation sketch and consent to an iterative process. Explain the eight-question maximum, skip rights, conversation-only state, non-diagnostic scope, and professional-advice limits before asking sensitive questions.
+
+## Procedure
+
+Ask one decision-relevant question per turn. Start with reality: roles and responsibilities, fixed commitments, health or energy constraints the user chooses to disclose, resources, deadlines, financial or geographic bounds, current sources of energy and depletion, and prior attempts. Do not assume every constraint is permanent, but do not wish it away.
+
+Clarify value trade-offs through concrete choices rather than abstract labels. Separate immediate stabilization, one-year direction, and longer-horizon possibility. Identify which decisions are reversible, costly to reverse, or effectively irreversible and how uncertainty changes the appropriate commitment.
+
+Generate two to four materially different hypotheses, including a conservative option when appropriate. For each, show fit with values and energy, responsibilities honored, resources needed, opportunity cost, risks, unknowns, reversibility, and evidence that would change the option. Avoid treating a small answer set as a lifetime verdict.
+
+Convert the strongest options into small tests: a conversation, sample project, schedule trial, course, shadowing period, budget rehearsal, or other bounded action. Define duration, cost, learning question, stop signal, and review date. Prefer useful information over symbolic ambition.
+
+## Stop and Exit Behavior
+
+Stop on withdrawal, after eight substantive questions, or early when feasible hypotheses and experiments are ready. If the issue turns on medical, mental-health, legal, or financial advice, bound the planning support and direct the user to a qualified professional for that decision.
+
+## Artifact Contract
+
+This Protocol produces terminal output and no persistent personal Artifact. The output contains current-reality constraints, value trade-offs, multiple hypotheses, reversibility analysis, next experiments, review criteria, and uncertainty.
+
+## Evidence Policy
+
+Attribute personal facts to the user and mark interpretations as hypotheses. Use concrete behavior and outcomes where possible. Do not elevate a preference stated once into a stable identity claim.
+
+## Safety Boundaries
+
+Do not diagnose, pressure disclosure, persist a personal dossier, make irreversible choices for the user, or present this workflow as therapy or professional medical, legal, or financial advice.

@@ -14,6 +14,17 @@ from thinking_protocols.errors import ProtocolParseError
 from thinking_protocols.protocols import Protocol, load_protocol
 
 
+BASE_EVAL_CATEGORIES = frozenset(
+    {
+        "should_trigger",
+        "should_not_trigger",
+        "missing_input",
+        "early_stop",
+        "unsafe_or_sensitive",
+    }
+)
+
+
 @dataclass(frozen=True, slots=True)
 class ValidationIssue:
     code: str
@@ -248,14 +259,34 @@ def _eval_issues(
                     message=error.message,
                 )
             )
-        if not schema_errors and evals["protocol_id"] != record.protocol.metadata["id"]:
-            issues.append(
-                ValidationIssue(
-                    code="EVALS_PROTOCOL_MISMATCH",
-                    path=f"{relative_path}::protocol_id",
-                    message="evals.yaml protocol_id does not match Protocol id",
+        if not schema_errors:
+            if evals["protocol_id"] != record.protocol.metadata["id"]:
+                issues.append(
+                    ValidationIssue(
+                        code="EVALS_PROTOCOL_MISMATCH",
+                        path=f"{relative_path}::protocol_id",
+                        message="evals.yaml protocol_id does not match Protocol id",
+                    )
                 )
-            )
+            required_categories = set(BASE_EVAL_CATEGORIES)
+            metadata = record.protocol.metadata
+            if metadata["capabilities"]["required"]:
+                required_categories.add("missing_required_capability")
+            roles = {
+                metadata["epistemic_role"]["primary"],
+                *metadata["epistemic_role"]["secondary"],
+            }
+            if "research" in roles:
+                required_categories.add("evidence_conflict")
+            actual_categories = {case["category"] for case in evals["cases"]}
+            for category in sorted(required_categories - actual_categories):
+                issues.append(
+                    ValidationIssue(
+                        code="MISSING_EVAL_CATEGORY",
+                        path=f"{relative_path}::evals.cases",
+                        message=f"Protocol evals are missing category: {category}",
+                    )
+                )
     return issues
 
 

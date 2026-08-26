@@ -154,7 +154,7 @@ def test_iterative_protocol_requires_user_consent() -> None:
     assert "ITERATIVE_CONSENT_REQUIRED" in decision.reason_codes
 
 
-def test_primary_role_ties_break_lexicographically_with_reason() -> None:
+def test_primary_role_ties_prefer_direct_answer_to_specialized_guessing() -> None:
     protocols = (
         synthetic_protocol("zeta", primary_role="decide"),
         synthetic_protocol("alpha", primary_role="decide"),
@@ -163,8 +163,9 @@ def test_primary_role_ties_break_lexicographically_with_reason() -> None:
 
     decision = route_request(request, protocols)
 
-    assert decision.protocol_ids == ("alpha",)
-    assert "ROLE_TIE_LEXICOGRAPHIC" in decision.reason_codes
+    assert decision.action == "direct_answer"
+    assert decision.protocol_ids == ()
+    assert "AMBIGUOUS_PRIMARY_ROLE" in decision.reason_codes
 
 
 def test_no_routing_decision_contains_more_than_two_protocols() -> None:

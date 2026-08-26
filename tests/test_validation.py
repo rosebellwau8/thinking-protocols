@@ -64,6 +64,45 @@ def add_protocol(root: Path, directory: str, metadata: dict[str, object]) -> Pat
     return path
 
 
+def add_evals(
+    protocol_path: Path,
+    protocol_id: str = "example-protocol",
+    *,
+    categories: tuple[str, ...] = (
+        "should_trigger",
+        "should_not_trigger",
+        "missing_input",
+        "early_stop",
+        "unsafe_or_sensitive",
+        "missing_required_capability",
+    ),
+) -> None:
+    expected_by_category = {
+        "should_trigger": "run_protocol",
+        "should_not_trigger": "direct_answer",
+        "missing_input": "request_input",
+        "early_stop": "stop",
+        "unsafe_or_sensitive": "blocked",
+        "missing_required_capability": "blocked",
+        "evidence_conflict": "run_protocol",
+    }
+    cases = [
+        {
+            "id": f"case_{index}",
+            "category": category,
+            "input": f"Input for {category}.",
+            "expected": expected_by_category[category],
+        }
+        for index, category in enumerate(categories)
+    ]
+    (protocol_path.parent / "evals.yaml").write_text(
+        yaml.safe_dump(
+            {"protocol_id": protocol_id, "cases": cases}, sort_keys=False
+        ),
+        encoding="utf-8",
+    )
+
+
 def issue_codes(root: Path) -> set[str]:
     return {issue.code for issue in validate_repository(root).issues}
 
@@ -181,3 +220,50 @@ def test_malformed_evals_are_reported_structurally(tmp_path: Path) -> None:
     )
 
     assert "EVALS_SCHEMA_ERROR" in issue_codes(root)
+
+
+def test_missing_base_eval_category_is_reported(tmp_path: Path) -> None:
+    root = make_repository(tmp_path)
+    shutil.copy(PROJECT_ROOT / "schemas" / "evals.schema.json", root / "schemas")
+    protocol_path = add_protocol(root, "example", base_metadata())
+    add_evals(
+        protocol_path,
+        categories=(
+            "should_trigger",
+            "should_not_trigger",
+            "missing_input",
+            "unsafe_or_sensitive",
+            "missing_required_capability",
+        ),
+    )
+
+    assert "MISSING_EVAL_CATEGORY" in issue_codes(root)
+
+
+def test_required_capability_needs_missing_capability_eval(tmp_path: Path) -> None:
+    root = make_repository(tmp_path)
+    shutil.copy(PROJECT_ROOT / "schemas" / "evals.schema.json", root / "schemas")
+    protocol_path = add_protocol(root, "example", base_metadata())
+    add_evals(
+        protocol_path,
+        categories=(
+            "should_trigger",
+            "should_not_trigger",
+            "missing_input",
+            "early_stop",
+            "unsafe_or_sensitive",
+        ),
+    )
+
+    assert "MISSING_EVAL_CATEGORY" in issue_codes(root)
+
+
+def test_research_role_needs_evidence_conflict_eval(tmp_path: Path) -> None:
+    root = make_repository(tmp_path)
+    shutil.copy(PROJECT_ROOT / "schemas" / "evals.schema.json", root / "schemas")
+    metadata = base_metadata()
+    metadata["epistemic_role"] = {"primary": "research", "secondary": []}
+    protocol_path = add_protocol(root, "example", metadata)
+    add_evals(protocol_path)
+
+    assert "MISSING_EVAL_CATEGORY" in issue_codes(root)

@@ -31,10 +31,7 @@ def test_codex_build_emits_discoverable_skill_per_protocol(tmp_path: Path) -> No
     paths = build_adapter(ROOT, "codex", output)
 
     assert {path.relative_to(output).as_posix() for path in paths} == {
-        "skills/fact-checking/SKILL.md",
-        "skills/minimum-experiment/SKILL.md",
-        "skills/socratic-questioning/SKILL.md",
-        "skills/steelman-both-sides/SKILL.md",
+        f"skills/{protocol.metadata['id']}/SKILL.md" for protocol in pilot_protocols()
     }
     for protocol in pilot_protocols():
         path = output / "skills" / protocol.metadata["id"] / "SKILL.md"
@@ -63,4 +60,3 @@ def test_codex_build_is_byte_deterministic(tmp_path: Path) -> None:
 
     assert {path.relative_to(output): path.read_bytes() for path in second} == first_bytes
     assert all(b"\r\n" not in content for content in first_bytes.values())
-

@@ -93,10 +93,13 @@ def route_request(
             return RoutingDecision(
                 action="direct_answer", reason_codes=("NO_PROTOCOL_MATCH",)
             )
+        if len(role_matches) > 1:
+            return RoutingDecision(
+                action="direct_answer",
+                reason_codes=("AMBIGUOUS_PRIMARY_ROLE",),
+            )
         target = role_matches[0]
         reasons = ("PRIMARY_ROLE_MATCH",)
-        if len(role_matches) > 1:
-            reasons += ("ROLE_TIE_LEXICOGRAPHIC",)
     else:
         return RoutingDecision(
             action="direct_answer", reason_codes=("DIRECT_ANSWER_DEFAULT",)

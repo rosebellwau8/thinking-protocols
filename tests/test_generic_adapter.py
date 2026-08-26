@@ -15,16 +15,13 @@ def pilot_protocols():
     ]
 
 
-def test_generic_build_contains_one_complete_prompt_per_pilot(tmp_path: Path) -> None:
+def test_generic_build_contains_one_complete_prompt_per_protocol(tmp_path: Path) -> None:
     output = tmp_path / "generic"
 
     written = build_adapter(ROOT, "generic", output)
 
     assert {path.name for path in written} == {
-        "fact-checking.md",
-        "minimum-experiment.md",
-        "socratic-questioning.md",
-        "steelman-both-sides.md",
+        f"{protocol.metadata['id']}.md" for protocol in pilot_protocols()
     }
     for protocol in pilot_protocols():
         rendered = (output / f"{protocol.metadata['id']}.md").read_text(
